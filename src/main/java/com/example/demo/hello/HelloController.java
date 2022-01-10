@@ -1,5 +1,6 @@
 package com.example.demo.hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 //画面外からリクエストを受け付けるクラス
 @Controller
 public class HelloController {
+//	DIを使用するために付与
+	@Autowired
+	private HelloService service;
 
 //	GETメソッドのHTTPリクエストを受け付けるために、@GetMappingアノテーションを使う
 //	受け付けるURLを、@GetMappingの引数に設定
@@ -36,4 +40,17 @@ public class HelloController {
 //		response.htmlに画面遷移
 		return "hello/response";
 	}
-}
+		
+		@PostMapping("hello/db")
+		public String postDbRequest(@RequestParam("text2")String id, Model model) {
+//			1件検索
+			Employee employee = service.getEmployee(id);
+//			検索結果をmodelに登録
+			model.addAttribute("employee", employee);
+//			db.htmlに画面遷移
+			return "hello/db";
+			
+			
+		}
+	}
+
